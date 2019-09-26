@@ -323,9 +323,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e705cda4c5efed42b13a65f02828447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pointsSphere: []
+  mat: {fileID: 2100000, guid: 0df59f61b7ee25e449065d588c2fc352, type: 2}
   planWidth: 3
-  planHeight: 3
-  planMat: {fileID: 2100000, guid: 0df59f61b7ee25e449065d588c2fc352, type: 2}
+  planHeight: 2
+  cylinderHeight: 10
+  cylinderRadius: 0
+  nbMeridienCylinder: 0
+  sphereRadius: 10
+  nbMeridienSphere: 10
+  nbParallelSphere: 10
 --- !u!4 &2079402449
 Transform:
   m_ObjectHideFlags: 0

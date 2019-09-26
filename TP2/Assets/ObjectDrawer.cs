@@ -58,19 +58,19 @@ public class ObjectDrawer : MonoBehaviour
     {
         msh.Clear();
 
-        pointsSphere = new Vector3[nbMeridien * nbParallel + 2];
+        pointsSphere = new Vector3[nbMeridien * (nbParallel-1) + 2];
         int[] triangles = new int[(nbMeridien * nbParallel * 6) + (nbMeridien * 3)];
 
         //Points
 
         //pole nord
-        pointsSphere[pointsSphere.Length-2] = new Vector3(0, radius, 0);
+        pointsSphere[pointsSphere.Length - 2] = new Vector3(0, radius, 0);
         //pole sud
         pointsSphere[pointsSphere.Length - 1] = new Vector3(0, -radius, 0);
 
         float x, y, z;
-        int indexPoint = 0; //on commence l'index à 2 car les deux premiers points sont les poles;
-        for (int j = 0; j < nbParallel; j++)
+        int indexPoint = 0;
+        for (int j = 1; j < nbParallel; j++)
         {
             float phi = Mathf.PI / nbParallel * j;
             for (int i = 0; i < nbMeridien; i++)
@@ -85,6 +85,7 @@ public class ObjectDrawer : MonoBehaviour
                 indexPoint++;
             }
         }
+
 
         //triangles
         int indexTriangle = 0;
@@ -102,6 +103,52 @@ public class ObjectDrawer : MonoBehaviour
         triangles[indexTriangle] = nbMeridien - 1;
         triangles[indexTriangle + 1] = pointsSphere.Length-2;
         triangles[indexTriangle + 2] = 0;
+        indexTriangle += 3;
+
+
+        //faces lattérales nbParallel-2
+        for (int j = 0; j < nbParallel - 2; j++)
+        {
+            for (int i = 0; i < nbMeridien - 1; i++)
+            {
+                triangles[indexTriangle] = (j + 1) * nbMeridien + (i);
+                triangles[indexTriangle + 1] = (j) * nbMeridien + (i);
+                triangles[indexTriangle + 2] = (j) * nbMeridien + (i+1);
+
+                triangles[indexTriangle + 3] = (j + 1) * nbMeridien + (i);
+                triangles[indexTriangle + 4] = (j) * nbMeridien + (i + 1);
+                triangles[indexTriangle + 5] = (j + 1) * nbMeridien + (i + 1);
+
+                if (i != nbMeridien - 1)
+                {
+                    indexTriangle += 6;
+                }
+            }
+            triangles[indexTriangle] = (j + 1) * nbMeridien + (nbMeridien - 1);
+            triangles[indexTriangle + 1] = (j) * nbMeridien + (nbMeridien - 1);
+            triangles[indexTriangle + 2] = (j) * nbMeridien;
+
+            triangles[indexTriangle + 3] = (j + 1) * nbMeridien + (nbMeridien - 1);
+            triangles[indexTriangle + 4] = (j) * nbMeridien;
+            triangles[indexTriangle + 5] = (j + 1) * nbMeridien;
+
+            indexTriangle += 6;
+        }
+
+        //face du bas
+        for (int i = 0; i < nbMeridien-1; i++)
+        {
+            triangles[indexTriangle] = nbMeridien * (nbParallel-2) + i;
+            triangles[indexTriangle + 1] = nbMeridien * (nbParallel - 2) + i + 1;
+            triangles[indexTriangle + 2] = pointsSphere.Length - 1; ;
+            if (i != nbMeridien - 1)
+            {
+                indexTriangle += 3;
+            }
+        }
+        triangles[indexTriangle] = nbMeridien * (nbParallel - 2) + nbMeridien - 1;
+        triangles[indexTriangle + 1] = nbMeridien * (nbParallel - 3) + nbMeridien;
+        triangles[indexTriangle + 2] = pointsSphere.Length - 1;
 
         msh.vertices = pointsSphere;
         msh.triangles = triangles;
@@ -260,10 +307,10 @@ public class ObjectDrawer : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        for (int i = 0; i < pointsSphere.Length; i++)
+        /*for (int i = 0; i < pointsSphere.Length; i++)
         {
             Gizmos.DrawSphere(pointsSphere[i], 1);
-        }
+        }*/
     }
 
 }
