@@ -106,7 +106,7 @@ public class ObjectDrawer : MonoBehaviour
         indexTriangle += 3;
 
 
-        //faces lattérales nbParallel-2
+        //faces lattérales 
         for (int j = 0; j < nbParallel - 2; j++)
         {
             for (int i = 0; i < nbMeridien - 1; i++)
